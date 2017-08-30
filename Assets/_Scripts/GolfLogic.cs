@@ -35,8 +35,7 @@ public class GolfLogic : MonoBehaviour
     public float backSpin;
 
     private Vector3 teePosition;
-
-
+    
 
 	void Start ()
     {
@@ -51,23 +50,17 @@ public class GolfLogic : MonoBehaviour
         switch (clickCount)
         {
             case 1:
-
                 break;
             case 2:
                 power = hitMeter.value;
-                golfBall.initialVelocity.z = power * 30;
+                golfBall.initialVelocity.z = power * 40;
                 break;
             case 3:
                 Debug.Log("Boom!");
                 accuracy = hitMeter.value;
-                golfBall.angularVelocity.z = accuracy;
+                golfBall.angularVelocity.z = accuracy * 20;
 
                 golfBall.Hit();
-                break;
-            case 4:
-                hitMeter.Refresh();
-                clickCount = 0;
-                golfBall.transform.position = teePosition;
                 break;
         }
     }
@@ -87,4 +80,12 @@ public class GolfLogic : MonoBehaviour
             hitMeter.value = accuracy;
         }
 	}
+
+    public void ResetShot()
+    {
+        hitMeter.Refresh();
+        golfBall.Stop();
+        golfBall.transform.position = teePosition;
+        clickCount = 0;
+    }
 }

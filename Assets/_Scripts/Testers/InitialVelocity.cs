@@ -24,12 +24,25 @@ public class InitialVelocity : MonoBehaviour
         ShotReset();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Hit();
+        }
+    }
+
     /// <summary>
     /// A new shot
     /// </summary>
     private void ShotReset()
     {
         startPostition = transform.position;
+    }
+
+    public void Stop()
+    {
+        _rigidbody.isKinematic = true;
     }
 
     /// <summary>
@@ -41,6 +54,7 @@ public class InitialVelocity : MonoBehaviour
 
         startTime = Time.time;
 
+        _rigidbody.isKinematic = false;
         _rigidbody.velocity = initialVelocity;
         _rigidbody.angularVelocity = angularVelocity;
 
