@@ -7,30 +7,16 @@ public class CameraScript : MonoBehaviour
     public GameObject ball;
     private Vector3 offset;
 
-    GolfBall gb;
-
 	void Start ()
     {
-        gb = GameObject.FindGameObjectWithTag("GolfBall").GetComponent<GolfBall>();
-
         offset = transform.position - ball.transform.position;
 	}
 
-	void Update ()
+	void FixedUpdate ()
     {
-        //if (gb.readyToHit)
-        //{
-        //    transform.LookAt(gb.target);
-
-        //    // if ball has gone passed the pin
-        //    // then reset the ball offset to the oppisite way
-            
-
-        //}
-        //else
-        //{
-        //    transform.position = ball.transform.position + offset;
-        //}
-            
-	}
+        transform.LookAt(ball.transform);
+        transform.position = ball.transform.position + offset;
+        // if ball has gone passed the pin
+        // then reset the ball offset to the oppisite way
+    }
 }
