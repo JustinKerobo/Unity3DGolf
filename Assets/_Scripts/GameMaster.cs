@@ -31,12 +31,12 @@ public class GameMaster : MonoBehaviour
     private int dTT;
     private int dTP;
     
-    GolfBall gb;
+    GolfBall_Old gb;
 
 
     void Start ()
     {
-        gb = GameObject.FindGameObjectWithTag("GolfBall").GetComponent<GolfBall>();
+        gb = GameObject.FindGameObjectWithTag("GolfBall").GetComponent<GolfBall_Old>();
 
         camAim.enabled = false;
         camMain.enabled = true;

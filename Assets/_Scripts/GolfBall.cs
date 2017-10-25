@@ -1,62 +1,88 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class GolfBall : MonoBehaviour
 {
-    private Rigidbody rb;
+    public Vector3 initialVelocity, angularVelocity;
 
-    [Header("Variables")]
-    public float launchSpeed = 160;
-    public float laynchAngleV = 20;
-    public float launchAngleH = 0;
-    public float altitude = 30;
-    public float backSpin = 3000;
-    public float sideSpin = 0;
+    public float magnusConstant = 1f;
 
-    [Header("Results")]
-    public float totalDistance;
-    public float carryDistance;
-    public float height;
-    public float total_backSpin;
-    public float total_sideSpin;
-    public float time;
+    private Rigidbody _rigidbody;
 
-    public Vector3 landingZone;
+    private Vector3 startPostition;
+    private float startTime;
 
-    [Header("Real Time")]
-    public Vector3 startPos;
-    public float curSpeed;
+    public float shotDistance; // meters
+    public float speed;
 
-	void Awake ()
+    private bool isHit;
+
+    private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-
-        float y = rb.mass;
-
-        rb.AddRelativeForce(0, 10, 10, ForceMode.Impulse);
+        _rigidbody = GetComponent<Rigidbody>();
+        ShotReset();
     }
-	
-	// Update is called once per frame
-	void FixedUpdate ()
+
+    private void Update()
     {
-        //if (shotInProcess && ballSpeed < 0.009)
-        //{
-        //    // stop ball from rolling
-        //    rb.angularDrag = 100f;
-        //    endPosDist = transform.position;
-        //    shotDist = (startPosDist - endPosDist).magnitude;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Hit();
+        }
+    }
 
-        //    shotComplete = true;
-        //    shotInProcess = false;
-        //}
+    /// <summary>
+    /// A new shot
+    /// </summary>
+    private void ShotReset()
+    {
+        startPostition = transform.position;
+    }
 
-        curSpeed = rb.velocity.magnitude;
+    public void Stop()
+    {
+        _rigidbody.isKinematic = true;
+    }
 
-        if (curSpeed < 1.5f && curSpeed > 0)
-            rb.isKinematic = true;
+    /// <summary>
+    /// When the ball is hit
+    /// </summary>
+    public void Hit()
+    {
+        Debug.Log("Shot Begin");
 
+        startTime = Time.time;
 
-        totalDistance = Vector3.Distance(startPos, transform.position);
+        _rigidbody.isKinematic = false;
+        _rigidbody.velocity = initialVelocity;
+        _rigidbody.angularVelocity = angularVelocity;
 
+        isHit = true;
+    }
+
+    /// <summary>
+    /// When the ball stop rolling
+    /// </summary>
+    private void ShotEnd()
+    {
+        Debug.Log("Shot End");
+        isHit = false;
+        ShotReset();
+    }
+
+    private void FixedUpdate()
+    {
+        if (isHit && _rigidbody.velocity.magnitude > 0.05f)
+        {
+            _rigidbody.AddForce(magnusConstant * Vector3.Cross(_rigidbody.angularVelocity, _rigidbody.velocity));
+
+            shotDistance = Vector3.Distance(startPostition, transform.position);
+            speed = shotDistance / (Time.time - startTime);
+        }
+        else if (isHit)
+        {
+            ShotEnd();
+        }
     }
 }

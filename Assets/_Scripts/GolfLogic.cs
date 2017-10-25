@@ -27,7 +27,7 @@ public class GolfLogic : MonoBehaviour
     public Button button;
     public int clickCount;
 
-    public InitialVelocity golfBall;
+    public GolfBall golfBall;
     public HitMeter hitMeter;
     
     public float power;
