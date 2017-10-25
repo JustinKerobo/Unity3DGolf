@@ -3,6 +3,7 @@
 /[Bb]uild/
 /[Bb]uilds/
 /.vs
+/UnityPagageManager
 
 *.csproj
 *.unityproj
